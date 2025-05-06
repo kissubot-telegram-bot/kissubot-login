@@ -3,7 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const verifyTelegramAuth = require('./utils/verifyTelegramAuth.js');
+const verifyTelegramAuth = require('./utils/verifyTelegramAuth');
 const User = require('./models/User');
 const profileRoutes = require('./profileRoutes');
 
