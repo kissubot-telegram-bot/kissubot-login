@@ -1,3 +1,21 @@
+const axios = require('axios');
+const TELEGRAM_BOT_TOKEN = process.env.BOT_TOKEN;
+
+async function notifyMatch(userA, userB) {
+  const message = `You matched with @${userB.username || 'someone'}! Tap to chat: https://t.me/${userB.username}`;
+  const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+  try {
+    await axios.post(url, {
+      chat_id: userA.telegramId,
+      text: message
+    });
+  } catch (err) {
+    console.error('Failed to notify:', err.message);
+  }
+}
+
+
+
 const express = require('express');
 const router = express.Router();
 const User = require('../models/UserProfile');
@@ -47,6 +65,7 @@ router.post('/like', async (req, res) => {
     const fromUser = await User.findOne({ telegramId: fromId });
     const toUser = await User.findOne({ telegramId: toId });
 
+
     if (!fromUser || !toUser) return res.status(404).json({ message: "User(s) not found" });
 
     // Already liked?
@@ -61,6 +80,10 @@ router.post('/like', async (req, res) => {
       fromUser.matches.push(toId);
       toUser.matches.push(fromId);
       await toUser.save();
+
+      await notifyMatch(fromUser, toUser);
+await notifyMatch(toUser, fromUser);
+
     }
 
     await fromUser.save();
