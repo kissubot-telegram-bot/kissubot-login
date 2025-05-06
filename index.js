@@ -5,6 +5,8 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const verifyTelegramAuth = require('./utils/verifyTelegramAuth');
 const User = require('./models/User');
+const profileRoutes = require('./profileRoutes');
+
 
 const app = express();
 app.use(cors());
@@ -33,6 +35,8 @@ app.post('/auth', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+app.use('/api/user', profileRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
