@@ -9,4 +9,3 @@ function checkTelegramAuth(data, botToken) {
 }
 
 module.exports = checkTelegramAuth;
-
