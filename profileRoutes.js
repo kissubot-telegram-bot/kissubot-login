@@ -105,3 +105,13 @@ router.get('/matches/:telegramId', async (req, res) => {
 });
 
 module.exports = router;
+// Browse other users (excluding current user)
+router.get('/browse/:telegramId', async (req, res) => {
+  try {
+    const { telegramId } = req.params;
+    const users = await User.find({ telegramId: { $ne: telegramId } }).limit(5); // exclude self
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
